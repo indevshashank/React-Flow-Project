@@ -33,7 +33,7 @@ agenda.define('process schedule', async (job) => {
         subject = 'Follow-Up Email Subject'; // Customize as needed
       }
       const temptext = await templates.findOne({name: currentProcess.data})
-      console.log(schedule.listnames, subject, temptext.text)
+
       await agenda.now('send email', { listname: schedule.listnames, subject, text: temptext.text });
       if (nextProcessIndex < schedule.process.length) {
         await agenda.now('process schedule', { scheduleId, processIndex: nextProcessIndex });
@@ -41,7 +41,7 @@ agenda.define('process schedule', async (job) => {
     } else if (currentProcess.processtype === 'wait') {
       const waitTime = parseInt(currentProcess.data, 10);
       const waitUnit = currentProcess.type.toLowerCase();
-      console.log(`in ${waitTime} ${waitUnit}`) // 'days', 'hours', etc.
+
       await agenda.schedule(`in ${waitTime} ${waitUnit}`, 'process schedule', { scheduleId, processIndex: nextProcessIndex });
     }
     if (nextProcessIndex >= schedule.process.length) {

@@ -123,9 +123,7 @@ const Flow = () => {
   event.preventDefault();
 };
 
-useEffect(() => {
-  console.log(cart);
-}, [cart])
+
 
 // Event handler to prevent node movement on drag stop
 const onNodeDragStop = (event, node) => {
@@ -136,12 +134,12 @@ const closelist = ()=>{setListmodal(false)}
 const changelist = (id, newLabel) => {
   const newcart  = {listnames: newLabel, process: []}  
   setCart(newcart)
-  console.log(id, newLabel)
+
   setNode((nds) =>
     nds.map((node) => {
-      console.log(node)
+
       if (node.id === id) {
-        console.log(node)
+ 
         return {
           ...node,
           data: {
@@ -192,7 +190,7 @@ function remove (id){
       
     }
     form.append("data",nodes)
-    const response = await fetch("http://localhost:3001/api/createschedule" , {
+    const response = await fetch("https://react-flow-project-zeta.vercel.app/api/createschedule" , {
       method : "POST",
       headers:{
         'Content-Type': 'application/json'
@@ -203,10 +201,14 @@ function remove (id){
     if(json.success){
       setSavestatus(true)
     }
-    console.log(json)
+
   }
   return (
     <div className="">
+      <div className="ml-4">
+        <h1 className="font-semibold text-xl text-fuchsia-600 drop-shadow-md">React MERN Task</h1>
+        <h2>Mailmaster</h2>
+      </div>
       <div className="flex space-x-2 items-center justify-start p-2 ">
       <button className="p-2 border rounded-md hover:bg-green-500 hover:text-white " onClick={()=>{if(cart.process && cart.process.length>0){sendtoback()}}}>Save and Schedule</button>
       {savestatus && <span className="text-green-500 font-bold">Saved and Scheduled Successfully</span>}
@@ -214,7 +216,7 @@ function remove (id){
       {listmodal && <Listmodal closelist={closelist} changelist={changelist} />}
       {procmodal && <Processmodal closepros={closepros} cart={cart} tempdone={tempdone} />}
       <div
-        className="md:h-[45rem]    h-full w-screen m-auto"
+        className=" w-screen m-auto"
         ref={reactflowbox}
       >
         

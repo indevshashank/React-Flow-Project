@@ -6,7 +6,7 @@ import { GoPersonAdd } from 'react-icons/go';
 
 const Newnode = ({data, id, selected}) => {
  
-console.log("hk")
+
   
   return (
     <>

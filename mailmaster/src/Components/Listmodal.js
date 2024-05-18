@@ -15,7 +15,7 @@ const Listmodal = ({ type, length, closelist,changelist }) => {
     async function fetchtlist (){
         try {
       
-            const responselist = await fetch("http://localhost:3001/api/fetchlist",{
+            const responselist = await fetch("https://react-flow-project-zeta.vercel.app/api/fetchlist",{
                 method: "GET"
             })
             const jsonlist = await responselist.json()
@@ -130,9 +130,11 @@ const Listmodal = ({ type, length, closelist,changelist }) => {
                         className="bordernone p-2  w-full border *:p-2 outline-none "
                       />
                     </div>
-                  {Receipentslist.length>0 && <div className=" w-full flex justify-end   "><button onClick={()=>{
-                    setListitems((prev)=>[...prev,Teamname]); setNewmomdal(false)
-                  }} className="p-2 font-semibold my-2  text-white rounded-md bg-blue-400 hover:bg-blue-500">Create List</button></div>}
+                  {Receipentslist.length>0 && <div className=" w-full flex justify-end   "><button 
+                  // onClick={()=>{
+                  //   setListitems((prev)=>[...prev,Teamname]); setNewmomdal(false)
+                  // }}
+                   className="p-2 font-semibold my-2  text-white rounded-md bg-blue-400 hover:bg-blue-500">Create List</button></div>}
                   </div>
                 )}
               </div>

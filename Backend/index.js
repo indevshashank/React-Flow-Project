@@ -18,7 +18,7 @@ const port = 3001;
 app.use(bodyParser.json());
 app.use(
     cors({
-      origin: ["http://localhost:3000"],
+      origin: ["https://react-flow-project-e26o.vercel.app"],
       methods: ["GET", "POST", "OPTIONS", "PUT", "DELETE"], // Include 'OPTIONS'
     allowedHeaders: "*", // Add any custom headers used in requests
     credentials: true, 
@@ -125,7 +125,7 @@ app.post("/api/createschedule", async(req,res)=>{
   try {
     listnames.forEach(async (element) => {
       try {
-        console.log(element,process)
+
         const newSchedule = new Schedule({ listnames: element, process });
         await newSchedule.save();
         
@@ -156,7 +156,6 @@ app.post("/api/visit", async (req,res)=>{
   try {
       const firstcount= await Counterschema.find({})
         const newcount = firstcount[0].counter+1
-        console.log((newcount))
         const response  = await Counterschema.findOneAndUpdate({}, {counter: newcount})
     
       res.status(200).json({found : firstcount, changed: newcount, status: response})

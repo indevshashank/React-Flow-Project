@@ -8,7 +8,7 @@ import { MdOutlineEmail } from "react-icons/md";
 import { MdOutlineAccessTime } from "react-icons/md";
 import { FiFilter } from "react-icons/fi";
 const Processmodal = ({ type, length, closepros, tempdone, cart }) => {
-  console.log(cart);
+
 
   const [lasttype, setLasttype] = useState(null);
   const waitlist = ["Days", "Weeks", "Month","seconds"];
@@ -27,7 +27,7 @@ const Processmodal = ({ type, length, closepros, tempdone, cart }) => {
   useEffect(() => {
     async function fetchtemp (){
         try {
-            const response = await fetch("http://localhost:3001/api/fetchtemplate",{
+            const response = await fetch("https://react-flow-project-zeta.vercel.app/api/fetchtemplate",{
                 method: "GET"
             })
             const json = await response.json()
@@ -53,16 +53,7 @@ const Processmodal = ({ type, length, closepros, tempdone, cart }) => {
   const [wait, setWait] = useState(null);
   const [waittype, setWaittype] = useState("Days");
  
-  useEffect(() => {
-    console.log(
-      "modal value",
-      modal,
-      "mailvalue",
-      mailstatus,
-      "Last node type",
-      lasttype
-    );
-  }, [modal, mailstatus, lasttype]);
+
 
  
   return (
