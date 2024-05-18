@@ -28,7 +28,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}))
 
 app.get("/", (req,res)=>{
-  res.json("hello")
+  res.json("hello i am mailmaster")
 });
 app.post("/save",async (req,res)=>{
   const password = "Narwar1978@"
