@@ -205,10 +205,7 @@ function remove (id){
   }
   return (
     <div className="">
-      <div className="ml-4">
-        <h1 className="font-semibold text-xl text-fuchsia-600 drop-shadow-md">React MERN Task</h1>
-        <h2>Mailmaster</h2>
-      </div>
+  
       <div className="flex space-x-2 items-center justify-start p-2 ">
       <button className="p-2 border rounded-md hover:bg-green-500 hover:text-white " onClick={()=>{if(cart.process && cart.process.length>0){sendtoback()}}}>Save and Schedule</button>
       {savestatus && <span className="text-green-500 font-bold">Saved and Scheduled Successfully</span>}
@@ -216,7 +213,7 @@ function remove (id){
       {listmodal && <Listmodal closelist={closelist} changelist={changelist} />}
       {procmodal && <Processmodal closepros={closepros} cart={cart} tempdone={tempdone} />}
       <div
-        className=" w-screen m-auto"
+        className="md:h-[45rem]    h-full w-screen m-auto"
         ref={reactflowbox}
       >
         
