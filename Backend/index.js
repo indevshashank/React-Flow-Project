@@ -82,7 +82,7 @@ app.post("/api/savelist", async (req,res)=>{
     const  listdata = new List({name, emails})
     const response =  await listdata.save();
     
-    res.status(200).json({status: response})
+    res.status(200).json({status: true, data: response})
   } catch (error) {
       res.status(404).json({err: error.message})
   }

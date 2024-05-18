@@ -11,23 +11,48 @@ const Listmodal = ({ type, length, closelist,changelist }) => {
   const [Teamname, setTeamname] = useState("");
   const [Receipentslist, setReceipentslist] = useState("");
   const [listitem , setListitems]=  useState([]);
+  async function fetchtlist (){
+    try {
+  
+        const responselist = await fetch("https://react-flow-project-zeta.vercel.app/api/fetchlist",{
+            method: "GET"
+        })
+        const jsonlist = await responselist.json()
+        setListitems(jsonlist)
+        
+       } catch (error) {
+        console.log(error.message)
+       }
+}
   useEffect(() => {
-    async function fetchtlist (){
-        try {
-      
-            const responselist = await fetch("https://react-flow-project-zeta.vercel.app/api/fetchlist",{
-                method: "GET"
-            })
-            const jsonlist = await responselist.json()
-            setListitems(jsonlist)
-            
-           } catch (error) {
-            console.log(error.message)
-           }
-    }
+  
     fetchtlist()
    
   }, [])
+  const savelist = async ()=>{
+    const data = {
+      name: Teamname,
+      emails: Receipentslist
+    }
+    try {
+      const response = await fetch("https://react-flow-project-zeta.vercel.app/api/savelist",{
+        method : "POST",
+        headers:{
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+      const json = await response.json();
+      if(json.status){
+        fetchtlist()
+        setNewmomdal(false)
+        setTeamname("")
+        setReceipentslist("")
+      }
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
   return (
     <div className="bg-opacity-30 font-sans text-gray-700 h-screen w-screen  md:px-7 lg:px-28 xl:px-96 py-28 fixed z-[1000] flex items-center justify-center bg-black">
       <div className="p-4 bg-gray-50 w-full h-full rounded-md">
@@ -130,11 +155,10 @@ const Listmodal = ({ type, length, closelist,changelist }) => {
                         className="bordernone p-2  w-full border *:p-2 outline-none "
                       />
                     </div>
-                  {Receipentslist.length>0 && <div className=" w-full flex justify-end   "><button 
-                  // onClick={()=>{
-                  //   setListitems((prev)=>[...prev,Teamname]); setNewmomdal(false)
-                  // }}
-                   className="p-2 font-semibold my-2  text-white rounded-md bg-blue-400 hover:bg-blue-500">Create List</button></div>}
+                  {Receipentslist.length>0 && <div className=" w-full flex justify-end   "><button onClick={()=>{
+
+                    savelist() 
+                  }} className="p-2 font-semibold my-2  text-white rounded-md bg-blue-400 hover:bg-blue-500">Create List</button></div>}
                   </div>
                 )}
               </div>

@@ -24,36 +24,59 @@ const Processmodal = ({ type, length, closepros, tempdone, cart }) => {
       setMailstatus("new email");
     }
   }, [cart]);
+  async function fetchtemp (){
+    try {
+        const response = await fetch("https://react-flow-project-zeta.vercel.app/api/fetchtemplate",{
+            method: "GET"
+        })
+        const json = await response.json()
+        setTemplate(json)
+        
+       } catch (error) {
+        console.log(error.message)
+       }
+}
   useEffect(() => {
-    async function fetchtemp (){
-        try {
-            const response = await fetch("https://react-flow-project-zeta.vercel.app/api/fetchtemplate",{
-                method: "GET"
-            })
-            const json = await response.json()
-            setTemplate(json)
-            
-           } catch (error) {
-            console.log(error.message)
-           }
-    }
+  
     fetchtemp()
    
   }, [])
   
-
-  const [mailtype, setMailtype] = useState("");
   const [modal, setModal] = useState(null);
-  const [searchitem, setSearchitem] = useState(" ");
-  const [selectedtemp, setSelectedtemp] = useState("");
-  const [newmodal, setNewmomdal] = useState(false);
   const [Tempname, setTempname] = useState("");
   const [tempselected, setTempSelected] = useState(false);
-  const [Receipentslist, setReceipentslist] = useState("");
+
   const [wait, setWait] = useState(null);
   const [waittype, setWaittype] = useState("Days");
+  const [addmodal, setAddmodal] = useState(null);
+  const [newTemp, setNewTemp] = useState("");
+  const [temptext, setTemptext] = useState("")
  
+  const savetemp = async ()=>{
+    const data = {
+      name: newTemp,
+      text: temptext
+    }
+    try {
+      const response = await fetch("https://react-flow-project-zeta.vercel.app/api/savetemplate",{
+        method : "POST",
+        headers:{
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+      const json = await response.json();
+      if(json.status){
+        fetchtemp()
+        setAddmodal(false)
+        setNewTemp("")
+        setTemptext("")
+      }
+    } catch (error) {
+      console.log(error.message)
+    }
 
+  }
 
  
   return (
@@ -138,10 +161,46 @@ const Processmodal = ({ type, length, closepros, tempdone, cart }) => {
                 <p>Send an email to a lead</p>
                 <div className=" flex justify-between ">
                   <h1 className="font-bold mt-4 py-2">Email template</h1>
-                  <button className="flex justify-between items-center space-x-2 text-blue-500 border-2 p-1 rounded-md border-blue-500 ">
+                  <button onClick={()=>{setAddmodal(true)}} className="flex justify-between items-center space-x-2 text-blue-500 border-2 p-1 rounded-md border-blue-500 ">
                     <span>New Template</span> <MdAdd />{" "}
                   </button>
                 </div>
+                {addmodal && (
+              <div className="w-full  border rounded-md p-2 bg-white">
+                <label id="Teamname" className="font-semibold ">
+                  Template Name
+                </label>
+                <div>
+                  <input
+                    type="text"
+                    onChange={(e) => {
+                      setNewTemp(e.target.value);
+                    }}
+                    placeholder="Type Template Name"
+                    className="bordernone p-2  w-full border  outline-none "
+                  />
+                </div>
+                {newTemp.length > 0 && (
+                  <div className="my-2">
+                    <h2 className="font-semibold">Text</h2>
+                    <div>
+                      <input
+                        type="text"
+                        onChange={(e) => {
+                          setTemptext(e.target.value);
+                        }}
+                        placeholder="Type Text for template"
+                        className="bordernone p-2  w-full border  outline-none "
+                      />
+                    </div>
+                  {temptext.length>0 && <div className=" w-full flex justify-end   "><button onClick={()=>{
+
+                    savetemp() 
+                  }} className="p-2 font-semibold my-2  text-white rounded-md bg-blue-400 hover:bg-blue-500">Create Template</button></div>}
+                  </div>
+                )}
+              </div>
+            )}
                 <div className="relative w-full">
                   {" "}
                   <div className="flex justify-center border p-2 my-2 bg-gray-100  items-center">
@@ -174,7 +233,7 @@ const Processmodal = ({ type, length, closepros, tempdone, cart }) => {
                         .filter((item) => {
                           const itemsearch = item.name.toUpperCase();
                           const searchterm = Tempname.toUpperCase();
-                          if (searchitem.length > 0) {
+                          if (searchterm.length > 0) {
                             return itemsearch.includes(searchterm);
                           }
                         })

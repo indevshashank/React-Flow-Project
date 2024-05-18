@@ -129,6 +129,10 @@ const Flow = () => {
 const onNodeDragStop = (event, node) => {
   event.preventDefault();
 };
+useEffect(() => {
+console.log(cart)
+}, [cart])
+
 
 const closelist = ()=>{setListmodal(false)} 
 const changelist = (id, newLabel) => {
