@@ -1,0 +1,176 @@
+import React, { useEffect, useState } from 'react'
+import { CgCloseR } from 'react-icons/cg';
+import { CiCircleRemove } from 'react-icons/ci';
+import { IoMdAddCircleOutline } from 'react-icons/io';
+
+const EditListModal = ({listnames, changelist,closelist}) => {
+    const [searchitem, setSearchitem] = useState("");
+    const [selecteditem, setSelecteditem] = useState(listnames);
+    const [newmodal, setNewmomdal] = useState(false);
+    const [Teamname, setTeamname] = useState("");
+    const [Receipentslist, setReceipentslist] = useState("");
+    const [listitem , setListitems]=  useState([]);
+    async function fetchtlist (){
+        try {
+      
+            const responselist = await fetch("https://react-flow-project-zeta.vercel.app/api/fetchlist",{
+                method: "GET"
+            })
+            const jsonlist = await responselist.json()
+            setListitems(jsonlist)
+            
+           } catch (error) {
+            console.log(error.message)
+           }
+    }
+      useEffect(() => {
+      
+        fetchtlist()
+       
+      }, [])
+    const savelist = async ()=>{
+        const data = {
+          name: Teamname,
+          emails: Receipentslist
+        }
+        try {
+          const response = await fetch("https://react-flow-project-zeta.vercel.app/api/savelist",{
+            method : "POST",
+            headers:{
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+          })
+          const json = await response.json();
+          if(json.status){
+            fetchtlist()
+            setNewmomdal(false)
+            setTeamname("")
+            setReceipentslist("")
+          }
+        } catch (error) {
+          console.log(error.message)
+        }
+      }
+  return (
+    <div className="bg-opacity-30 font-sans text-gray-700 h-screen w-screen  md:px-7 lg:px-28 xl:px-96 py-28 fixed z-[1000] flex items-center justify-center bg-black">
+    <div className="p-4 bg-gray-50 w-full h-full rounded-md">
+    <div onClick={()=>{closelist()}} className="border-b  text-blue-700 w-full flex justify-end my-2 underline-offset-2 cursor-pointer ">
+          <CgCloseR size={32} />
+        </div>
+    <h1 className="font-bold">Update Leads from List(s)</h1>
+            <p>Connect multiple lists as source fot this sequence</p>
+            <div className="flex my-2 justify-between items-center">
+              <span className="font-semibold">Select your List(s)</span>
+              <div
+                onClick={() => {
+                  setNewmomdal((prev)=>!prev);
+                }}
+                className="p-2 flex justify-between items-center space-x-2 border-2 font-semibold hover:text-blue-700 cursor-pointer text-blue-600 rounded border-blue-600"
+              >
+                <span>New list</span>
+                <IoMdAddCircleOutline size={24} />
+              </div>
+            </div>
+             {newmodal &&  <div className="w-full  border rounded-md p-2 bg-white">
+                <label id="Teamname" className="font-semibold ">
+                  Team Name
+                </label>
+                <div>
+                  <input
+                    type="text"
+                    onChange={(e) => {
+                      setTeamname(e.target.value);
+                    }}
+                    placeholder="Type Team Name"
+                    className="bordernone p-2  w-full border  outline-none "
+                  />
+                </div>
+                {Teamname.length > 0 && (
+                  <div className="my-2">
+                    <h2 className="font-semibold">Reciepents</h2>
+                    <div>
+                      <input
+                        type="text"
+                        onChange={(e) => {
+                          setReceipentslist(e.target.value);
+                        }}
+                        placeholder="Receipents Comma(,) Separated for multiple"
+                        className="bordernone p-2  w-full border *:p-2 outline-none "
+                      />
+                    </div>
+                  {Receipentslist.length>0 && <div className=" w-full flex justify-end   "><button onClick={()=>{
+
+                    savelist() 
+                  }} className="p-2 font-semibold my-2  text-white rounded-md bg-blue-400 hover:bg-blue-500">Create List</button></div>}
+                  </div>
+                )}
+              </div>
+}
+            <div className=" my-2  relative  rounded-sm">
+              <div className="border flex items-center bg-white p-2 my-2">
+                <div className="flex space-x-2">
+                  {selecteditem.map((item, index) => (
+                    <span
+                      key={index}
+                      onClick={() => {
+                        setSelecteditem((prev) => {
+                          return prev.filter((itemlist) => itemlist !== item);
+                        });
+                      }}
+                      className=" border flex rounded-md hover:bg-slate-200 cursor-pointer  justify-center items-center p-1 text-sm flex-nowrap space-x-2  bg-slate-100"
+                    >
+                      <span className="text-nowrap">{item} </span>
+                      <CiCircleRemove />
+                    </span>
+                  ))}
+                </div>{" "}
+                <input
+                  onChange={(e) => {
+                    setSearchitem(e.target.value);
+                  }}
+                  className="w-full px-2 py-2   outline-none border-none "
+                  placeholder="Search for list"
+                />
+              </div>
+              {selecteditem.length > 0 && (
+                <div className="w-full bg-gray-50 my-2 flex justify-end ">
+                  <button onClick={()=>{
+                    changelist("1",selecteditem, true )
+                     ; closelist()}} className=" p-2 border bg-blue-500 text-white rounded-lg font-semibold px-4">
+                    
+                    Update
+                  </button>
+                </div>
+              )}
+              <div className=" bg-white absolute right-0 left-0  overflow-y-scroll  overflow-hidden w-full ">
+                { searchitem.length>0 && listitem.length>0 && listitem
+                  .filter((item) => {
+                    const itemsearch = item.name.toUpperCase();
+                    const searchterm = searchitem.toUpperCase();
+                    if (searchitem.length > 0) {
+                      return (
+                        itemsearch.includes(searchterm) &&
+                        !selecteditem.includes(item.name)
+                      );
+                    }
+                  })
+                  .map((item, index) => (
+                    <span
+                      onClick={() => {
+                        setSelecteditem((prev) => [...prev, item.name]);
+                      }}
+                      className="w-full p-2  block cursor-pointer my-2  hover:bg-gray-100"
+                      key={index}
+                    >
+                      {item.name}
+                    </span>
+                  
+                     ))} </div>
+            </div>
+          </div>
+    </div>
+  )
+}
+
+export default EditListModal

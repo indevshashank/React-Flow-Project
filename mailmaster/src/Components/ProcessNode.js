@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Background, Handle, Position, useOnSelectionChange } from "reactflow";
 
 import { MdAdd } from "react-icons/md";
@@ -8,11 +8,15 @@ import { MdOutlineAccessTime } from "react-icons/md";
 import { CgCloseR } from "react-icons/cg";
 import { FiEdit } from "react-icons/fi";
 const ProcessNode = ({ data, id, selected }) => {
+
+  const [hover, setHover] = useState(false);
   return (
     <>
-      <div className="text-[10px] w-44 border relative ">
-        {/* <div className="absolute -top-2 right-0 flex space-x-1">
-          <div className="bg-orange-300 text-orange-500 rounded-sm cursor-pointer">
+      <div  onMouseEnter={()=>{setHover(true)}} onMouseLeave={()=>{setHover(false)}} className="text-[10px] w-44 border rounded-md relative ">
+      {hover &&  <div  className="absolute -top-2 right-0 flex space-x-1">
+          <div onClick={() => {
+              data.edit(id);
+            }} className="bg-orange-300 text-orange-500 rounded-sm cursor-pointer">
             <FiEdit size={15} />
           </div>
           <div
@@ -23,7 +27,7 @@ const ProcessNode = ({ data, id, selected }) => {
           >
             <CgCloseR size={15} />
           </div>
-        </div> */}
+        </div>}
         {!data.content.length > 0 ? (
           <div
             onClick={() => {
@@ -41,7 +45,7 @@ const ProcessNode = ({ data, id, selected }) => {
               {data.processtype === "email" && (
                 <>
                   <div className="flex col-span-2 justify-center py-2 text-red-500 rounded-md bg-red-100  items-center ">
-                    <MdOutlineEmail size={28} />
+                    <MdOutlineEmail size={28} />  
                   </div>
                   <div className="col-span-3 ">
                     <h2 className="font-semibold">Send Email</h2>

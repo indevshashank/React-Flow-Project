@@ -119,7 +119,7 @@ const Listmodal = ({ type, length, closelist,changelist }) => {
               <span className="font-semibold">Select your List(s)</span>
               <div
                 onClick={() => {
-                  setNewmomdal(true);
+                  setNewmomdal((prev)=>!prev);
                 }}
                 className="p-2 flex justify-between items-center space-x-2 border-2 font-semibold hover:text-blue-700 cursor-pointer text-blue-600 rounded border-blue-600"
               >
@@ -191,13 +191,13 @@ const Listmodal = ({ type, length, closelist,changelist }) => {
               </div>
               {selecteditem.length > 0 && (
                 <div className="w-full bg-gray-50 my-2 flex justify-end ">
-                  <button onClick={()=>{changelist("1",selecteditem ) ; closelist()}} className=" p-2 border bg-blue-500 text-white rounded-lg font-semibold px-4">
+                  <button onClick={()=>{changelist("1",selecteditem,false ) ; closelist()}} className=" p-2 border bg-blue-500 text-white rounded-lg font-semibold px-4">
                     
                     Insert
                   </button>
                 </div>
               )}
-              <div className=" bg-white ">
+              <div className=" bg-white absolute right-0 left-0  overflow-y-scroll  overflow-hidden  max-h-40 ">
                 { searchitem.length>0 && listitem.length>0 && listitem
                   .filter((item) => {
                     const itemsearch = item.name.toUpperCase();

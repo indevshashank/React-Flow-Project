@@ -161,7 +161,7 @@ const Processmodal = ({ type, length, closepros, tempdone, cart }) => {
                 <p>Send an email to a lead</p>
                 <div className=" flex justify-between ">
                   <h1 className="font-bold mt-4 py-2">Email template</h1>
-                  <button onClick={()=>{setAddmodal(true)}} className="flex justify-between items-center space-x-2 text-blue-500 border-2 p-1 rounded-md border-blue-500 ">
+                  <button onClick={()=>{setAddmodal((prev)=>!prev)}} className="flex justify-between items-center space-x-2 text-blue-500 border-2 p-1 rounded-md border-blue-500 ">
                     <span>New Template</span> <MdAdd />{" "}
                   </button>
                 </div>
@@ -226,7 +226,7 @@ const Processmodal = ({ type, length, closepros, tempdone, cart }) => {
                       </div>
                     )}
                   </div>
-                  <div className="bg-white absolute right-0 left-0">
+                  <div className="bg-white absolute  overflow-y-scroll  overflow-hidden  max-h-40  right-0   left-0">
                     {Tempname.length > 0 &&
                       !tempselected && template.length>0 &&
                       template
